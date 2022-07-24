@@ -11,9 +11,11 @@ import (
 	"go.mongodb.org/mongo-driver/mongo/options"
 )
 
-var mongoCtx context.Context
-var client *mongo.Client
-var database *mongo.Database
+var (
+	mongoCtx context.Context
+	client   *mongo.Client
+	database *mongo.Database
+)
 
 func Init() {
 	if err := godotenv.Load(); err != nil {
@@ -25,6 +27,7 @@ func Init() {
 		log.Fatal("You must set your 'MONGODB_URI' env")
 	}
 
+	mongoCtx = context.Background()
 	client, err := mongo.Connect(mongoCtx, options.Client().ApplyURI(uri))
 	if err != nil {
 		panic(err)
@@ -39,4 +42,8 @@ func Stop() {
 		panic(err)
 	}
 	fmt.Println("Connection to database closed")
+}
+
+func GetCollection(collectionName string) *mongo.Collection {
+	return database.Collection(collectionName)
 }
