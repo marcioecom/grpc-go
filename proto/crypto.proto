@@ -1,0 +1,19 @@
+syntax = "proto3";
+
+option go_package = "pb";
+
+service CryptoVotingService {
+  rpc CreateCrypto (Crypto) returns (CreateCryptoResponse);
+}
+
+message Crypto {
+  string id = 1;
+  string name = 2;
+  int64 up = 3;
+  int64 down = 4;
+  int64 total = 5;
+}
+
+message CreateCryptoResponse {
+  Crypto crypto = 1;
+}
