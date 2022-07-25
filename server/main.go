@@ -70,3 +70,25 @@ func (s *server) UpvoteCrypto(ctx context.Context, req *pb.UpvoteCryptoRequest) 
 
 	return &pb.UpvoteCryptoResponse{Ok: true}, nil
 }
+
+func (s *server) DownvoteCrypto(ctx context.Context, req *pb.DownvoteCryptoRequest) (*pb.DownvoteCryptoResponse, error) {
+	var crypto models.Crypto
+
+	oid, err := primitive.ObjectIDFromHex(req.GetId())
+	if err != nil {
+		return nil, status.Errorf(codes.InvalidArgument, fmt.Sprintf("Invalid ObjectId: %v", err.Error()))
+	}
+
+	filter := bson.M{"_id": oid}
+	update := bson.M{"$inc": bson.M{"down": 1, "total": -1}}
+
+	err = s.collection.FindOneAndUpdate(s.mongoCtx, filter, update).Decode(&crypto)
+	if err != nil {
+		if err == mongo.ErrNoDocuments {
+			return nil, status.Errorf(codes.NotFound, "Crypto not found")
+		}
+		log.Fatal(err)
+	}
+
+	return &pb.DownvoteCryptoResponse{Ok: true}, nil
+}
