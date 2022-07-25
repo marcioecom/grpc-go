@@ -19,14 +19,23 @@ func main() {
 
 	client := pb.NewCryptoVotingServiceClient(connection)
 
-	req := &pb.Crypto{
-		Name: "BTC",
+	// req := &pb.Crypto{
+	// 	Name: "BTC",
+	// }
+
+	// res, err := client.CreateCrypto(context.Background(), req)
+	// if err != nil {
+	// 	log.Fatalf("Error to update crypto: %v", err)
+	// }
+
+	req := &pb.UpvoteCryptoRequest{
+		Id: "62df0cf403c9472ca7bf3ee9",
 	}
 
-	res, err := client.CreateCrypto(context.Background(), req)
+	res, err := client.UpvoteCrypto(context.Background(), req)
 	if err != nil {
-		log.Fatalf("Error to create crypto: %v", err)
+		log.Fatalf("Error to update crypto: %v", err)
 	}
 
-	fmt.Println(res.Crypto)
+	fmt.Println(res)
 }
