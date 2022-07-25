@@ -4,6 +4,7 @@ option go_package = "pb";
 
 service CryptoVotingService {
   rpc CreateCrypto (Crypto) returns (CreateCryptoResponse);
+  rpc UpvoteCrypto (UpvoteCryptoRequest) returns (UpvoteCryptoResponse);
 }
 
 message Crypto {
@@ -16,4 +17,12 @@ message Crypto {
 
 message CreateCryptoResponse {
   Crypto crypto = 1;
+}
+
+message UpvoteCryptoRequest {
+  string id = 1;
+}
+
+message UpvoteCryptoResponse {
+  bool ok = 1;
 }
