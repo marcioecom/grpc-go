@@ -28,11 +28,11 @@ func main() {
 	// 	log.Fatalf("Error to update crypto: %v", err)
 	// }
 
-	req := &pb.UpvoteCryptoRequest{
+	req := &pb.DownvoteCryptoRequest{
 		Id: "62df0cf403c9472ca7bf3ee9",
 	}
 
-	res, err := client.UpvoteCrypto(context.Background(), req)
+	res, err := client.DownvoteCrypto(context.Background(), req)
 	if err != nil {
 		log.Fatalf("Error to update crypto: %v", err)
 	}
