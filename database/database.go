@@ -44,6 +44,10 @@ func Stop() {
 	fmt.Println("Connection to database closed")
 }
 
+func GetContext() context.Context {
+	return mongoCtx
+}
+
 func GetCollection(collectionName string) *mongo.Collection {
 	return database.Collection(collectionName)
 }
