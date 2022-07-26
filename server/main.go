@@ -119,3 +119,32 @@ func (s *server) GetCrypto(ctx context.Context, req *pb.GetCryptoRequest) (*pb.G
 
 	return &pb.GetCryptoResponse{Crypto: res}, nil
 }
+
+func (s *server) GetAllCryptos(ctx context.Context, req *pb.GetAllCryptosRequest) (*pb.GetAllCryptosResponse, error) {
+	var cryptos []models.Crypto
+
+	cursor, err := s.collection.Find(s.mongoCtx, bson.M{})
+	if err != nil {
+		return nil, status.Errorf(codes.Internal, fmt.Sprintf("Error to find cryptos: %v", err))
+	}
+
+	if err = cursor.All(s.mongoCtx, &cryptos); err != nil {
+		log.Fatal(err)
+	}
+
+	var res pb.GetAllCryptosResponse
+
+	for _, v := range cryptos {
+		item := &pb.Crypto{
+			Id:    v.ID.Hex(),
+			Name:  v.Name,
+			Up:    v.Up,
+			Down:  v.Down,
+			Total: v.Total,
+		}
+
+		res.Cryptos = append(res.Cryptos, item)
+	}
+
+	return &res, nil
+}
