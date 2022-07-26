@@ -92,3 +92,30 @@ func (s *server) DownvoteCrypto(ctx context.Context, req *pb.DownvoteCryptoReque
 
 	return &pb.DownvoteCryptoResponse{Ok: true}, nil
 }
+
+func (s *server) GetCrypto(ctx context.Context, req *pb.GetCryptoRequest) (*pb.GetCryptoResponse, error) {
+	var crypto models.Crypto
+
+	oid, err := primitive.ObjectIDFromHex(req.GetId())
+	if err != nil {
+		return nil, status.Errorf(codes.InvalidArgument, fmt.Sprintf("Invalid ObjectId: %v", err.Error()))
+	}
+
+	err = s.collection.FindOne(s.mongoCtx, bson.M{"_id": oid}).Decode(&crypto)
+	if err != nil {
+		if err == mongo.ErrNoDocuments {
+			return nil, status.Errorf(codes.NotFound, "Crypto not found")
+		}
+		log.Fatal(err)
+	}
+
+	res := &pb.Crypto{
+		Id:    crypto.ID.Hex(),
+		Name:  crypto.Name,
+		Up:    crypto.Up,
+		Down:  crypto.Down,
+		Total: crypto.Total,
+	}
+
+	return &pb.GetCryptoResponse{Crypto: res}, nil
+}
