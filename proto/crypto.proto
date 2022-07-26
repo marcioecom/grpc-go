@@ -7,7 +7,7 @@ service CryptoVotingService {
   rpc UpvoteCrypto (UpvoteCryptoRequest) returns (UpvoteCryptoResponse);
   rpc DownvoteCrypto (DownvoteCryptoRequest) returns (DownvoteCryptoResponse);
   rpc GetCrypto (GetCryptoRequest) returns (GetCryptoResponse);
-  rpc GetAllCryptos (GetAllCryptosRequest) returns (GetAllCryptosResponse);
+  rpc GetAllCryptos (GetAllCryptosRequest) returns (stream Crypto);
 }
 
 message Crypto {
@@ -47,7 +47,3 @@ message GetCryptoResponse {
 }
 
 message GetAllCryptosRequest {}
-
-message GetAllCryptosResponse {
-  repeated Crypto cryptos = 1;
-}
