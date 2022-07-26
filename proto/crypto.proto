@@ -6,6 +6,7 @@ service CryptoVotingService {
   rpc CreateCrypto (Crypto) returns (CreateCryptoResponse);
   rpc UpvoteCrypto (UpvoteCryptoRequest) returns (UpvoteCryptoResponse);
   rpc DownvoteCrypto (DownvoteCryptoRequest) returns (DownvoteCryptoResponse);
+  rpc GetCrypto (GetCryptoRequest) returns (GetCryptoResponse);
 }
 
 message Crypto {
@@ -34,4 +35,12 @@ message DownvoteCryptoRequest {
 
 message DownvoteCryptoResponse {
   bool ok = 1;
+}
+
+message GetCryptoRequest {
+  string id = 1;
+}
+
+message GetCryptoResponse {
+  Crypto crypto = 1;
 }
