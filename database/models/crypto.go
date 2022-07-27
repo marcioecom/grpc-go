@@ -3,9 +3,9 @@ package models
 import "go.mongodb.org/mongo-driver/bson/primitive"
 
 type Crypto struct {
-	ID    primitive.ObjectID `bson:"_id,omitempty"`
-	Name  string             `bson:"name,omitempty"`
-	Up    int64              `bson:"up,omitempty"`
-	Down  int64              `bson:"down,omitempty"`
-	Total int64              `bson:"total,omitempty"`
+	ID    primitive.ObjectID `json:"id" bson:"_id,omitempty"`
+	Name  string             `json:"name" bson:"name,omitempty"`
+	Up    int64              `json:"up" bson:"up,omitempty"`
+	Down  int64              `json:"down" bson:"down,omitempty"`
+	Total int64              `json:"total" bson:"total,omitempty"`
 }
