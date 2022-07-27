@@ -1,4 +1,4 @@
-name: Total Check
+name: Audit
 
 on:
   push:
@@ -7,8 +7,11 @@ on:
     branches: [main]
 
 jobs:
-
   audit:
+    name: "Run CI"
+    strategy:
+      matrix:
+        dir: ["database", "server", "client"]
     runs-on: ubuntu-20.04
     steps:
     - uses: actions/checkout@v2
@@ -27,13 +30,9 @@ jobs:
     - name: Run go vet
       run: go vet ./...
 
-    - name: Install staticcheck
-      run: go install honnef.co/go/tools/cmd/staticcheck@latest
-
-    - name: Run staticcheck
-      run: staticcheck ./...
-      ignore:
-        - ./pb
+    - uses: dominikh/staticcheck-action@v1.2.0
+      with:
+        working-directory: ${{ matrix.dir }}
 
     - name: Install golint
       run: go install golang.org/x/lint/golint@latest
