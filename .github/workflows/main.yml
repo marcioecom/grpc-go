@@ -20,28 +20,21 @@ jobs:
 
     - name: Verify dependencies
       run: go mod verify
-      working-directory: src
 
     - name: Build
       run: go build -v ./...
-      working-directory: src
 
     - name: Run go vet
       run: go vet ./...
-      working-directory: src
 
     - name: Install staticcheck
       run: go install honnef.co/go/tools/cmd/staticcheck@latest
-      working-directory: src
 
     - name: Run staticcheck
       run: staticcheck ./...
-      working-directory: src
 
     - name: Install golint
       run: go install golang.org/x/lint/golint@latest
-      working-directory: src
 
     - name: Run golint
       run: golint ./...
-      working-directory: src
