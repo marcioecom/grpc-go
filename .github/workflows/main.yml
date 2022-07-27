@@ -1,4 +1,4 @@
-name: Audit
+name: CI
 
 on:
   push:
@@ -9,9 +9,6 @@ on:
 jobs:
   audit:
     name: "Run CI"
-    strategy:
-      matrix:
-        dir: ["database", "server", "client"]
     runs-on: ubuntu-20.04
     steps:
     - uses: actions/checkout@v2
@@ -29,10 +26,6 @@ jobs:
 
     - name: Run go vet
       run: go vet ./...
-
-    - uses: dominikh/staticcheck-action@v1.2.0
-      with:
-        working-directory: ${{ matrix.dir }}
 
     - name: Install golint
       run: go install golang.org/x/lint/golint@latest
