@@ -48,7 +48,6 @@ Response:
   }
 }
 ~~~~
-<br>
 
 ### Get crypto
 > GET http://localhost:3001/:id
@@ -65,7 +64,6 @@ Response:
   }
 }
 ~~~~
-<br>
 
 ### Get all cryptos
 > GET http://localhost:3001/
@@ -89,7 +87,6 @@ Response:
   }
 ]
 ~~~~
-<br>
 
 ### Upvote crypto
 > PUT http://localhost:3001/up/:id
@@ -100,7 +97,6 @@ Response:
   "ok": true
 }
 ~~~~
-<br>
 
 ### Downvote crypto
 > PUT http://localhost:3001/down/:id
