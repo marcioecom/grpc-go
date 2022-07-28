@@ -1,0 +1,8 @@
+FROM golang:1.18 as builder
+WORKDIR /app
+COPY . .
+RUN CGO_ENABLED=0 GOOS=linux GOARCH=amd64 go build -o ./bin/server
+
+FROM scratch as runner
+COPY --from=builder /app/bin/server /server
+ENTRYPOINT [ "./server" ]

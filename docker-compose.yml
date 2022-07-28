@@ -1,0 +1,43 @@
+version: '3'
+
+services:
+  mongodb:
+    container_name: 'crypto-mongodb'
+    image: mongo
+    restart: always
+    ports:
+      - 27017:27017
+    networks:
+      - default
+
+  server:
+    container_name: 'crypto-server'
+    hostname: crypto-server
+    build:
+      context: .
+      dockerfile: Dockerfile.server
+    restart: always
+    environment:
+      - MONGODB_URI=${MONGODB_URI}
+    ports:
+      - 50051:50051
+    depends_on:
+      - mongodb
+    networks:
+      - default
+
+  client:
+    container_name: 'crypto-client'
+    build:
+      context: .
+      dockerfile: Dockerfile.client
+    restart: always
+    environment:
+      - SERVER_URL=${SERVER_URL}
+    ports:
+      - 3001:3001
+    networks:
+      - default
+
+networks:
+  default:
