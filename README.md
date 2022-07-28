@@ -22,6 +22,96 @@ Access the project folder, and download the Go dependencies
 $ go get ./...
 ```
 
+## 🚀 Running
+
+```
+$ docker-compose up -d
+```
+
+## 📄 Endpoints
+
+### Create Crypto
+> POST http://localhost:3001/ 
+
+Body:
+~~~~json
+{
+  "name": "BTC"
+}
+~~~~
+Response:
+~~~~json
+{
+  "crypto": {
+    "id": "62e212efafcd6a39f91a9c33",
+    "name": "BTC"
+  }
+}
+~~~~
+<br>
+
+### Get crypto
+> GET http://localhost:3001/:id
+
+Response:
+~~~~json
+{
+  "crypto": {
+    "id": "62e1e29b17ffc1b9e583c3c1",
+    "name": "BTC",
+    "up": 4,
+    "down": 1,
+    "total": 3
+  }
+}
+~~~~
+<br>
+
+### Get all cryptos
+> GET http://localhost:3001/
+
+Response:
+~~~~json
+[
+  {
+    "id": "62e212efafcd6a39f91a9c33",
+    "name": "BTC",
+    "up": 4,
+    "down": 1,
+    "total": 3
+  },
+  {
+    "id": "62e21310afcd6a39f91a9c34",
+    "name": "ETH",
+    "up": 2,
+    "down": 1,
+    "total": 1
+  }
+]
+~~~~
+<br>
+
+### Upvote crypto
+> PUT http://localhost:3001/up/:id
+
+Response:
+~~~~json
+{
+  "ok": true
+}
+~~~~
+<br>
+
+### Downvote crypto
+> PUT http://localhost:3001/down/:id
+
+Response:
+~~~~json
+{
+  "ok": true
+}
+~~~~
+
 ## 🛠️ Build with
 
 * [Golang](https://go.dev/) - Linguagem usada para desenvolver
