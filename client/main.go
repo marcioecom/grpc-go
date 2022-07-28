@@ -91,7 +91,7 @@ func getCrypto(c *fiber.Ctx) error {
 		})
 	}
 
-	return c.Status(fiber.StatusCreated).JSON(res)
+	return c.Status(fiber.StatusOK).JSON(res)
 }
 
 func getAllCryptos(c *fiber.Ctx) error {
@@ -129,7 +129,7 @@ func getAllCryptos(c *fiber.Ctx) error {
 		cryptos = append(cryptos, item)
 	}
 
-	return c.Status(fiber.StatusCreated).JSON(cryptos)
+	return c.Status(fiber.StatusOK).JSON(cryptos)
 }
 
 func upvoteCrypto(c *fiber.Ctx) error {
