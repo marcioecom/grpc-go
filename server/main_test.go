@@ -113,3 +113,17 @@ func TestDownvoteCrypto(t *testing.T) {
 
 	log.Printf("Downvoted crypto: %v", result)
 }
+
+func TestClearCryptoVotes(t *testing.T) {
+	ctx := context.Background()
+	client := createClient(ctx, t)
+
+	req := &pb.ClearVotesCryptoRequest{Id: cryptoTestId}
+
+	result, err := client.ClearVotes(ctx, req)
+	if err != nil {
+		t.Fatalf("Failed to clear crypto votes: %v", err)
+	}
+
+	log.Printf("Clear crypto votes: %v", result)
+}

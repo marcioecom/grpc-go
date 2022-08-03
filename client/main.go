@@ -52,6 +52,7 @@ func main() {
 	app.Post("/", createCrypto)
 	app.Put("/up/:id", upvoteCrypto)
 	app.Put("/down/:id", downvoteCrypto)
+	app.Put("/clear/:id", clearCryptoVotes)
 
 	app.Listen(":3001")
 }
@@ -153,6 +154,21 @@ func downvoteCrypto(c *fiber.Ctx) error {
 	req := &pb.DownvoteCryptoRequest{Id: id}
 
 	res, err := client.DownvoteCrypto(context.Background(), req)
+	if err != nil {
+		return c.Status(fiber.StatusBadRequest).JSON(fiber.Map{
+			"message": fmt.Sprintf("Error sending grpc message: %v", err),
+		})
+	}
+
+	return c.Status(fiber.StatusOK).JSON(res)
+}
+
+func clearCryptoVotes(c *fiber.Ctx) error {
+	id := c.Params("id")
+
+	req := &pb.ClearVotesCryptoRequest{Id: id}
+
+	res, err := client.ClearVotes(context.Background(), req)
 	if err != nil {
 		return c.Status(fiber.StatusBadRequest).JSON(fiber.Map{
 			"message": fmt.Sprintf("Error sending grpc message: %v", err),

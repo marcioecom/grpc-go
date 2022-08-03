@@ -3,7 +3,6 @@ package server
 import (
 	"context"
 	"fmt"
-	"log"
 
 	"github.com/marcioecom/grpc-go/database/models"
 	"github.com/marcioecom/grpc-go/pb"
@@ -65,7 +64,7 @@ func (s *server) UpvoteCrypto(ctx context.Context, req *pb.UpvoteCryptoRequest) 
 		if err == mongo.ErrNoDocuments {
 			return nil, status.Errorf(codes.NotFound, "Crypto not found")
 		}
-		log.Fatal(err)
+		return nil, status.Errorf(codes.Internal, err.Error())
 	}
 
 	return &pb.UpvoteCryptoResponse{Ok: true}, nil
@@ -87,7 +86,7 @@ func (s *server) DownvoteCrypto(ctx context.Context, req *pb.DownvoteCryptoReque
 		if err == mongo.ErrNoDocuments {
 			return nil, status.Errorf(codes.NotFound, "Crypto not found")
 		}
-		log.Fatal(err)
+		return nil, status.Errorf(codes.Internal, err.Error())
 	}
 
 	return &pb.DownvoteCryptoResponse{Ok: true}, nil
@@ -106,7 +105,7 @@ func (s *server) GetCrypto(ctx context.Context, req *pb.GetCryptoRequest) (*pb.G
 		if err == mongo.ErrNoDocuments {
 			return nil, status.Errorf(codes.NotFound, "Crypto not found")
 		}
-		log.Fatal(err)
+		return nil, status.Errorf(codes.Internal, err.Error())
 	}
 
 	res := &pb.Crypto{
@@ -143,4 +142,32 @@ func (s *server) GetAllCryptos(req *pb.GetAllCryptosRequest, stream pb.CryptoVot
 	}
 
 	return nil
+}
+
+func (s *server) ClearVotes(ctx context.Context, req *pb.ClearVotesCryptoRequest) (*pb.ClearVotesCryptoResponse, error) {
+	var crypto models.Crypto
+
+	oid, err := primitive.ObjectIDFromHex(req.GetId())
+	if err != nil {
+		return nil, status.Errorf(codes.InvalidArgument, fmt.Sprintf("Invalid ObjectId: %v", err.Error()))
+	}
+
+	filter := bson.M{"_id": oid}
+	update := bson.M{
+		"$set": bson.M{
+			"total": 0,
+			"down":  0,
+			"up":    0,
+		},
+	}
+
+	err = s.collection.FindOneAndUpdate(s.mongoCtx, filter, update).Decode(&crypto)
+	if err != nil {
+		if err == mongo.ErrNoDocuments {
+			return nil, status.Errorf(codes.NotFound, "Crypto not found")
+		}
+		return nil, status.Errorf(codes.Internal, err.Error())
+	}
+
+	return &pb.ClearVotesCryptoResponse{Ok: true}, nil
 }
